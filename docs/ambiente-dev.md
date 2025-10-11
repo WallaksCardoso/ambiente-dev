@@ -123,4 +123,4 @@ Quando isso estiver pronto, seu sistema já estará **enviando eventos Kafka sem
 
 
 
-<!-- sync: 2025-10-11T18:17:06.832Z -->
+<!-- sync: 2025-10-11T19:12:47.663Z -->
