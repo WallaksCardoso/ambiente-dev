@@ -1,13 +1,13 @@
 import { Client } from "@notionhq/client";
 import { NotionToMarkdown } from "notion-to-md";
 import fs from "fs";
+import path from "path";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const n2m = new NotionToMarkdown({ notionClient: notion });
 const PAGE_MARKER = /^#{0,3}\s*:::\s*(.+)$/m;
 
 async function syncPage() {
-  console.log("Conectando ao Notion...");
   const pageId = process.env.NOTION_PAGE_ID;
 
   try {
@@ -45,30 +45,39 @@ async function syncPage() {
     const basePath = "docs/Ambiente Dev";
     fs.mkdirSync(basePath, { recursive: true });
 
+    const generatedFiles = [];
+
     for (const sec of sections) {
       const safeName = sec.title.replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
       const filePath = `${basePath}/${safeName}.md`;
       const content = `# ${sec.title}\n\n${sec.content.join("\n").trim()}\n`;
       fs.writeFileSync(filePath, content, "utf8");
-      console.log("Gerado:", filePath);
+      generatedFiles.push(filePath);
+    }
+
+    const existingFiles = fs
+      .readdirSync(basePath)
+      .filter((f) => f.endsWith(".md") && f !== "README.md")
+      .map((f) => path.join(basePath, f));
+
+    for (const file of existingFiles) {
+      if (!generatedFiles.includes(file)) {
+        fs.unlinkSync(file);
+        console.log("Removido:", file);
+      }
     }
 
     const index = sections
       .map(
         (sec) =>
-          `- [${sec.title}](./Ambiente%20Dev/${sec.title
+          `- [${sec.title}](./${sec.title
             .replace(/[^\w\s-]/g, "")
             .replace(/\s+/g, "-")}.md)`
       )
       .join("\n");
 
-    const readmePath = "docs/MENU.md";
-    const readmeContent = `# Ambiente Dev\n\n${index}\n`;
-    fs.writeFileSync(readmePath, readmeContent, "utf8");
-
-    console.log("Índice criado → docs/MENU.md");
+    fs.writeFileSync("docs/README.md", "# Ambiente Dev\n\n" + index + "\n", "utf8");
   } catch (err) {
-    console.error("Erro ao sincronizar com o Notion:", err.message);
     fs.mkdirSync("debug", { recursive: true });
     fs.writeFileSync(
       "debug/notion-error.json",
