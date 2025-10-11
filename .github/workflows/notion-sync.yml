@@ -1,0 +1,55 @@
+name: Sync Notion → GitHub
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 12 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-notion
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Sincronizar com estado remoto
+        run: |
+          git fetch origin main
+          git reset --hard origin/main || true
+
+      - name: Instalar dependências
+        run: npm install @notionhq/client notion-to-md
+
+      - name: Rodar sync do Notion
+        run: node scripts/sync-notion.js
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
+
+      - name: Conferir alterações
+        run: |
+          ls -la docs || true
+          git status
+          git --no-pager diff --stat || true
+
+      - name: Commit e push
+        run: |
+          git config --global user.name "notion-bot"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add -A
+          git commit -m "Sync Notion → GitHub" || echo "No changes"
+          git push origin main
