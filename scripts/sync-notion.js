@@ -62,11 +62,11 @@ async function syncPage() {
       )
       .join("\n");
 
-    const readmePath = "docs/README.md";
+    const readmePath = "docs/MENU.md";
     const readmeContent = `# Ambiente Dev\n\n${index}\n`;
     fs.writeFileSync(readmePath, readmeContent, "utf8");
 
-    console.log("Índice criado → docs/README.md");
+    console.log("Índice criado → docs/MENU.md");
   } catch (err) {
     console.error("Erro ao sincronizar com o Notion:", err.message);
     fs.mkdirSync("debug", { recursive: true });
