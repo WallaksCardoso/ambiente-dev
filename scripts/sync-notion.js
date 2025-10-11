@@ -4,7 +4,7 @@ import fs from "fs";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const n2m = new NotionToMarkdown({ notionClient: notion });
-const PAGE_MARKER = /^#{0,3}\s*:::\s*(.+)$/m; // detecta ::: NOME mesmo se vier com ## no início
+const PAGE_MARKER = /^#{0,3}\s*:::\s*(.+)$/m;
 
 async function syncPage() {
   console.log("Conectando ao Notion...");
@@ -56,14 +56,17 @@ async function syncPage() {
     const index = sections
       .map(
         (sec) =>
-          `- [${sec.title}](./${sec.title
+          `- [${sec.title}](./Ambiente%20Dev/${sec.title
             .replace(/[^\w\s-]/g, "")
             .replace(/\s+/g, "-")}.md)`
       )
       .join("\n");
 
-    fs.writeFileSync(`${basePath}/README.md`, "# Ambiente Dev\n\n" + index + "\n", "utf8");
-    console.log("Índice criado → docs/Ambiente Dev/README.md");
+    const readmePath = "docs/README.md";
+    const readmeContent = `# Ambiente Dev\n\n${index}\n`;
+    fs.writeFileSync(readmePath, readmeContent, "utf8");
+
+    console.log("Índice criado → docs/README.md");
   } catch (err) {
     console.error("Erro ao sincronizar com o Notion:", err.message);
     fs.mkdirSync("debug", { recursive: true });
