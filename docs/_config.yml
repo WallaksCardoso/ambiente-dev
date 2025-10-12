@@ -1,41 +1,4 @@
 title: Ambiente Dev
-description: Documentação técnica automatizada — sincronizada com Notion
-baseurl: "/ambiente-dev" # caminho do repositório no GitHub Pages
-url: "https://wallakscardoso.github.io"
-
-remote_theme: just-the-docs/just-the-docs
-color_scheme: dark
-
-# Ativa busca interna
-search_enabled: true
-search:
-  heading_level: 3
-  previews: 3
-  tokenizer_separator: /[\s/]+/
-
-# Sidebar automática baseada na estrutura de pastas
-collections:
-  docs:
-    output: true
-    permalink: /:path/
-
-# Links do GitHub no header
-aux_links:
-  "Ver no GitHub":
-    - "https://github.com/WallaksCardoso/ambiente-dev"
-
-# Mostra a data de última modificação (se quiser)
-last_edit_timestamp: true
-last_edit_time_format: "%d/%m/%Y %H:%M"
-
-# Mantém o diretório padrão como "docs"
-include:
-  - docs
-exclude:
-  - node_modules
-  - scripts
-  - debug
-  - package.json
-  - package-lock.json
-  - .env
-  - .github
+description: Documentação sincronizada com Notion
+theme: jekyll-theme-cayman
+markdown: GFM
