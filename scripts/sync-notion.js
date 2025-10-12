@@ -76,12 +76,10 @@ ${sec.content.join("\n").trim()}
   }
 
   const index = sections
-    .map(
-      (sec) =>
-        `- [${sec.title}](./Ambiente-Dev/${sec.title
-          .replace(/[^\w\s-]/g, "")
-          .replace(/\s+/g, "-")}.md)`
-    )
+    .map((sec) => {
+      const safeName = sec.title.replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+      return `- [${sec.title}](./Ambiente-Dev/${safeName}.html)`;
+    })
     .join("\n");
 
   fs.writeFileSync("docs/index.md", "# Ambiente Dev\n\n" + index + "\n", "utf8");
