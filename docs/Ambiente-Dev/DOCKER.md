@@ -8,7 +8,6 @@ nav_order: 2
 
 ## 📄 **Guia: Rodando a Aplicação com Docker no IntelliJ (Windows)**
 
-
 ### ✅ Pré-requisitos
 
 - Docker Desktop instalado e em execução no Windows
@@ -16,16 +15,13 @@ nav_order: 2
 - IntelliJ com o plugin Docker ativado
 - Configuração no `application.properties` para uso do H2:
 
-```plain text
+```
 spring.datasource.url=jdbc:h2:mem:testdb
 spring.datasource.driver-class-name=org.h2.Driver
 spring.datasource.username=sa
 spring.datasource.password=
 ```
-
-
 ---
-
 
 ## ⚙️ 1. **Configurar Docker na IDE**
 
@@ -36,7 +32,6 @@ spring.datasource.password=
 3. Clique em **Test Connection** para validar.
 
 ---
-
 
 ## 🐳 2. **Criar configuração de execução com Dockerfile**
 
@@ -58,7 +53,6 @@ spring.datasource.password=
 
 ---
 
-
 ## 🌐 3. **Acessar no navegador**
 
 - **API**: [http://localhost:8080](http://localhost:8080/)
@@ -66,37 +60,27 @@ spring.datasource.password=
 
 **Preencha assim no H2:**
 
-
 | Campo     | Valor                |
 | --------- | -------------------- |
 | JDBC URL  | `jdbc:h2:mem:testdb` |
 | User Name | `sa`                 |
 | Password  | _(deixe em branco)_  |
 
-
 ---
-
 
 ## 🛑 4. **Parar e remover o container (se necessário)**
 
-
 Pelo terminal:
-
 
 ```shell
 docker stop pelada-gestao-container
 docker rm pelada-gestao-container
 ```
-
-
 Ou vá na aba **Services > Docker** na IDE, clique com o direito no container e escolha **Stop** e depois **Remove**.
-
 
 ---
 
-
 ## 🔁 Rebuild da imagem
-
 
 Sempre que mudar código Java e quiser reconstruir a imagem:
 

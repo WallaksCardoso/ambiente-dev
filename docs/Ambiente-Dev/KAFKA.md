@@ -8,9 +8,7 @@ nav_order: 2
 
 ## ✅ Etapa 1 – Configurar o produtor no `gestao-pelada`
 
-
 ### 📌 1. Adicionar dependência do Kafka no `pom.xml`
-
 
 ```xml
 <dependency>
@@ -18,27 +16,20 @@ nav_order: 2
     <artifactId>spring-kafka</artifactId>
 </dependency>
 ```
-
-
 ---
-
 
 ### 📌 2. Configurar o `application.properties`
 
-
-```plain text
+```
 spring.kafka.bootstrap-servers=localhost:9092
 spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
 spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
 ```
-
 > Obs: se quiser, depois podemos usar JsonSerializer para enviar objetos estruturados.
 
 ---
 
-
 ### 📌 3. Criar a classe de evento `JogadorCadastradoEvent`
-
 
 ```java
 package com.pelada_gestao.kafka.event;
@@ -54,13 +45,9 @@ public class JogadorCadastradoEvent {
     // getters e setters
 }
 ```
-
-
 ---
 
-
 ### 📌 4. Criar `KafkaProducerService`
-
 
 ```java
 package com.pelada_gestao.kafka;
@@ -91,16 +78,11 @@ public class KafkaProducerService {
     }
 }
 ```
-
-
 ---
-
 
 ### 📌 5. Registrar o producer no fluxo de cadastro
 
-
 No seu service de jogador, após salvar o jogador no banco:
-
 
 ```java
 JogadorCadastradoEvent evento = new JogadorCadastradoEvent();
@@ -111,9 +93,6 @@ evento.setData(LocalDate.now());
 
 kafkaProducerService.enviarEventoJogador(evento);
 ```
-
-
 ---
-
 
 Quando isso estiver pronto, seu sistema já estará **enviando eventos Kafka sempre que um jogador for cadastrado**.

@@ -8,7 +8,6 @@ nav_order: 2
 
 só add a dependencia 
 
-
 ```javascript
 <dependency>
             <groupId>org.springdoc</groupId>
@@ -16,9 +15,6 @@ só add a dependencia
             <version>2.5.0</version>
         </dependency>
 ```
-
-
 e entrei na url 
-
 
 [http://localhost:8080/swagger-ui/index.html#/](http://localhost:8080/swagger-ui/index.html#/)
