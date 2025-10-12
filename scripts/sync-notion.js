@@ -50,7 +50,15 @@ async function syncPage() {
   for (const sec of sections) {
     const safeName = sec.title.replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
     const filePath = normalize(`${basePath}/${safeName}.md`);
-    const content = `# ${sec.title}\n\n${sec.content.join("\n").trim()}\n`;
+    const content = `---
+layout: default
+title: ${sec.title}
+---
+
+# ${sec.title}
+
+${sec.content.join("\n").trim()}
+`;
     fs.writeFileSync(filePath, content, "utf8");
     generatedNames.push(`${safeName}.md`);
     console.log("Gerado:", safeName);
