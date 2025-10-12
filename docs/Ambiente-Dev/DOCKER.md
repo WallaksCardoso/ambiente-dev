@@ -17,8 +17,6 @@ nav_order: 2
 - Configuração no `application.properties` para uso do H2:
 
 ```plain text
-properties
-CopiarEditar
 spring.datasource.url=jdbc:h2:mem:testdb
 spring.datasource.driver-class-name=org.h2.Driver
 spring.datasource.username=sa
@@ -86,8 +84,6 @@ Pelo terminal:
 
 
 ```shell
-bash
-CopiarEditar
 docker stop pelada-gestao-container
 docker rm pelada-gestao-container
 ```

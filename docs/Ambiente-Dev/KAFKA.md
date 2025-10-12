@@ -13,8 +13,6 @@ nav_order: 2
 
 
 ```xml
-xml
-CopiarEditar
 <dependency>
     <groupId>org.springframework.kafka</groupId>
     <artifactId>spring-kafka</artifactId>
@@ -29,8 +27,6 @@ CopiarEditar
 
 
 ```plain text
-properties
-CopiarEditar
 spring.kafka.bootstrap-servers=localhost:9092
 spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
 spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
@@ -45,8 +41,6 @@ spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.Str
 
 
 ```java
-java
-CopiarEditar
 package com.pelada_gestao.kafka.event;
 
 import java.time.LocalDate;
@@ -69,8 +63,6 @@ public class JogadorCadastradoEvent {
 
 
 ```java
-java
-CopiarEditar
 package com.pelada_gestao.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -111,8 +103,6 @@ No seu service de jogador, após salvar o jogador no banco:
 
 
 ```java
-java
-CopiarEditar
 JogadorCadastradoEvent evento = new JogadorCadastradoEvent();
 evento.setNome(jogador.getNome());
 evento.setEmail("seuemail@destino.com"); // ou jogador.getEmail() se for individual
