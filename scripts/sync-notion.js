@@ -15,7 +15,11 @@ async function syncPage() {
   const mdResult = n2m.toMarkdownString(mdBlocks);
 
   fs.mkdirSync("debug", { recursive: true });
-  fs.writeFileSync("debug/notion-return.json", JSON.stringify(mdResult, null, 2));
+  fs.writeFileSync(
+    "debug/notion-return.json",
+    JSON.stringify({ blocks: mdBlocks, markdown: mdResult }, null, 2),
+    "utf8"
+  );
 
   let markdownContent = "";
   if (typeof mdResult === "string") markdownContent = mdResult;
@@ -43,7 +47,7 @@ async function syncPage() {
 
   fs.mkdirSync(basePath, { recursive: true });
 
-  const generatedNames = [];
+  const generated = new Set();
 
   for (const sec of sections) {
     const safeName = sec.title.replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
@@ -61,16 +65,13 @@ ${sec.content.join("\n").trim()}
 `;
 
     fs.writeFileSync(filePath, content, "utf8");
-    generatedNames.push(`${safeName}.md`);
+    generated.add(`${safeName}.md`);
     console.log("Gerado:", safeName);
   }
 
-  const existingFiles = fs
-    .readdirSync(basePath)
-    .filter((f) => f.endsWith(".md"));
-
-  for (const file of existingFiles) {
-    if (!generatedNames.includes(file)) {
+  const existing = fs.readdirSync(basePath).filter((f) => f.endsWith(".md"));
+  for (const file of existing) {
+    if (!generated.has(file)) {
       fs.unlinkSync(path.join(basePath, file));
       console.log("Removido:", file);
     }
@@ -92,7 +93,7 @@ ${sections
 `;
 
   fs.writeFileSync("docs/index.md", indexContent, "utf8");
-  console.log("Index atualizado → docs/index.md");
+  console.log("✅ Index atualizado → docs/index.md");
 
   process.exit(0);
 }
