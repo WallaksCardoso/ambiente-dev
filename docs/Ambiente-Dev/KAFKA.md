@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "KAFKA"
+nav_order: 2
 ---
 
 # KAFKA
