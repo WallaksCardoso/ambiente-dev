@@ -7,6 +7,15 @@ const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const n2m = new NotionToMarkdown({ notionClient: notion });
 const PAGE_MARKER = /^\s*#{0,3}\s*:::\s*(.+)$/m;
 
+function sanitizeMarkdown(md) {
+  return md
+    .replace(/```+\s*(plain\s?text|text|properties|xml)?\s+/g, "```$1\n") 
+    .replace(/```(plain\s)?text/g, "```")
+    .replace(/```xml\s+xml/g, "```xml")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 async function syncPage() {
   const pageId = process.env.NOTION_PAGE_ID;
   const basePath = "docs/Ambiente-Dev";
@@ -33,7 +42,6 @@ async function syncPage() {
 
   const sections = [];
   let current = null;
-
   for (const line of markdownContent.split("\n")) {
     const match = line.match(PAGE_MARKER);
     if (match) {
@@ -53,6 +61,8 @@ async function syncPage() {
     const safeName = sec.title.replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
     const filePath = path.join(basePath, `${safeName}.md`);
 
+    const cleaned = sanitizeMarkdown(sec.content.join("\n").trim());
+
     const content = `---
 layout: default
 title: "${sec.title.replace(/"/g, "'")}"
@@ -61,7 +71,7 @@ nav_order: 2
 
 # ${sec.title}
 
-${sec.content.join("\n").trim()}
+${cleaned}
 `;
 
     fs.writeFileSync(filePath, content, "utf8");
