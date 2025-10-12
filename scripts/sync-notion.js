@@ -53,6 +53,7 @@ async function syncPage() {
     const content = `---
 layout: default
 title: "${sec.title.replace(/"/g, "'")}"
+nav_order: 2
 ---
 
 # ${sec.title}
@@ -75,14 +76,24 @@ ${sec.content.join("\n").trim()}
     }
   }
 
-  const index = sections
-    .map((sec) => {
-      const safeName = sec.title.replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
-      return `- [${sec.title}](./Ambiente-Dev/${safeName}.html)`;
-    })
-    .join("\n");
+  const indexContent = `---
+layout: default
+title: "Ambiente Dev"
+nav_order: 1
+nav_exclude: true
+---
 
-  fs.writeFileSync("docs/index.md", "# Ambiente Dev\n\n" + index + "\n", "utf8");
+# Ambiente Dev
+
+${sections
+  .map((sec) => {
+    const safeName = sec.title.replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+    return `- [${sec.title}](./Ambiente-Dev/${safeName}.html)`;
+  })
+  .join("\n")}
+`;
+
+  fs.writeFileSync("docs/index.md", indexContent, "utf8");
   console.log("Index atualizado → docs/index.md");
 
   process.exit(0);
