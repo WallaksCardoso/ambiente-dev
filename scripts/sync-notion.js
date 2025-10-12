@@ -6,10 +6,10 @@ import path from "path";
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const n2m = new NotionToMarkdown({ notionClient: notion });
 const PAGE_MARKER = /^\s*#{0,3}\s*:::\s*(.+)$/m;
-const normalize = (p) => path.normalize(p);
 
 async function syncPage() {
   const pageId = process.env.NOTION_PAGE_ID;
+  const basePath = "docs/Ambiente-Dev";
 
   const mdBlocks = await n2m.pageToMarkdown(pageId);
   const mdResult = n2m.toMarkdownString(mdBlocks);
@@ -27,11 +27,10 @@ async function syncPage() {
       : JSON.stringify(mdResult, null, 2);
   else markdownContent = String(mdResult);
 
-  const lines = markdownContent.split("\n");
   const sections = [];
   let current = null;
 
-  for (const line of lines) {
+  for (const line of markdownContent.split("\n")) {
     const match = line.match(PAGE_MARKER);
     if (match) {
       if (current) sections.push(current);
@@ -42,14 +41,14 @@ async function syncPage() {
   }
   if (current) sections.push(current);
 
-  const basePath = "docs/Ambiente-Dev";
   fs.mkdirSync(basePath, { recursive: true });
 
   const generatedNames = [];
 
   for (const sec of sections) {
     const safeName = sec.title.replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
-    const filePath = normalize(`${basePath}/${safeName}.md`);
+    const filePath = path.join(basePath, `${safeName}.md`);
+
     const content = `---
 layout: default
 title: "${sec.title.replace(/"/g, "'")}"
@@ -60,6 +59,7 @@ nav_order: 2
 
 ${sec.content.join("\n").trim()}
 `;
+
     fs.writeFileSync(filePath, content, "utf8");
     generatedNames.push(`${safeName}.md`);
     console.log("Gerado:", safeName);
@@ -78,12 +78,10 @@ ${sec.content.join("\n").trim()}
 
   const indexContent = `---
 layout: default
-title: "Ambiente Dev"
+title: "Início"
 nav_order: 1
 nav_exclude: true
 ---
-
-# Ambiente Dev
 
 ${sections
   .map((sec) => {
