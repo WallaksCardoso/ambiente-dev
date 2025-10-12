@@ -42,7 +42,7 @@ async function syncPage() {
   }
   if (current) sections.push(current);
 
-  const basePath = "docs/Ambiente Dev";
+  const basePath = "docs/Ambiente-Dev";
   fs.mkdirSync(basePath, { recursive: true });
 
   const generatedNames = [];
@@ -52,7 +52,7 @@ async function syncPage() {
     const filePath = normalize(`${basePath}/${safeName}.md`);
     const content = `---
 layout: default
-title: ${sec.title}
+title: "${sec.title.replace(/"/g, "'")}"
 ---
 
 # ${sec.title}
@@ -78,7 +78,7 @@ ${sec.content.join("\n").trim()}
   const index = sections
     .map(
       (sec) =>
-        `- [${sec.title}](./Ambiente%20Dev/${sec.title
+        `- [${sec.title}](./Ambiente-Dev/${sec.title
           .replace(/[^\w\s-]/g, "")
           .replace(/\s+/g, "-")}.md)`
     )
