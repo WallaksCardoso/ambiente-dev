@@ -58,7 +58,7 @@ async function syncPage() {
 
   const existingFiles = fs
     .readdirSync(basePath)
-    .filter((f) => f.endsWith(".md") && f !== "MENU.md");
+    .filter((f) => f.endsWith(".md"));
 
   for (const file of existingFiles) {
     if (!generatedNames.includes(file)) {
@@ -70,13 +70,15 @@ async function syncPage() {
   const index = sections
     .map(
       (sec) =>
-        `- [${sec.title}](./${sec.title
+        `- [${sec.title}](./Ambiente%20Dev/${sec.title
           .replace(/[^\w\s-]/g, "")
           .replace(/\s+/g, "-")}.md)`
     )
     .join("\n");
 
-  fs.writeFileSync("docs/MENU.md", "# Ambiente Dev\n\n" + index + "\n", "utf8");
+  fs.writeFileSync("docs/index.md", "# Ambiente Dev\n\n" + index + "\n", "utf8");
+  console.log("Index atualizado → docs/index.md");
+
   process.exit(0);
 }
 
