@@ -1,29 +1,24 @@
-# === Node.js / npm ===
 node_modules/
 npm-debug.log*
 package-lock.json
 
-# === Ambiente / IDE ===
 .vscode/
 .idea/
 .DS_Store
 
-# === Logs / temporários ===
 *.log
 logs/
 *.tmp
 *.bak
 
-# === Sistema / OS ===
 Thumbs.db
 desktop.ini
 
-# === Build / cache ===
 dist/
 build/
 .cache/
 coverage/
 .env
 
-# === Docs gerados ===
 docs/debug.json
+debug/
